@@ -1,4 +1,4 @@
-function love.config(t)
+function love.conf(t)
 
 end
 

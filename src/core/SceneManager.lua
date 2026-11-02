@@ -10,10 +10,9 @@ does not manage run progression, generation or gameplay rules
 - [:change] immediately transitions to another scene calls exist on old scene then enter params for new scene, 
             callers should return after changing scenes to avoid continuing logic belonging to the previous scene
 
-[Dependenceis]
+[Dependencies]
 None
 ]]
-
 
 local SceneManager = {}
 SceneManager.__index = SceneManager
