@@ -1,5 +1,6 @@
 --[[
-MenuScene - Zeftarium
+
+MenuScene - Zeftarium, Katrina
 
 Displays the main menu and handles menu input
 
@@ -8,16 +9,15 @@ Displays the main menu and handles menu input
 - [:keyPressed] handles menu key presses
 
 [Dependencies]
-None
+Color class
+
 ]]
 
+-- Preamble
+local Color = require("src.classes.Color")
+
 -- Vars
-local textColor = {
-    red = 243/255,
-    green = 232/255,
-    blue = 215/255,
-    alpha = 1,
-}
+local textColor = Color.new255(243, 232, 215)
 
 local MenuScene = {}
 MenuScene.__index = MenuScene
@@ -34,7 +34,7 @@ function MenuScene:draw()
     local width = love.graphics.getWidth()
     local height = love.graphics.getHeight()
 
-    love.graphics.setColor(textColor.red, textColor.green, textColor.blue, textColor.alpha)
+    love.graphics.setColor(textColor:unpack())
 
     love.graphics.printf("Game name", 0, height * 0.35, width, "center")
     love.graphics.printf("Escape: quit", 0, height * 0.35 + 60, width, "center")

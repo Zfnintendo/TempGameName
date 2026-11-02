@@ -1,5 +1,9 @@
 --[[
-GameScene - Zeftarium
+
+GameScene.lua by Zeftarium, Katrina
+0.0.0
+C 2026-11-02
+U 2026-11-02
 
 Provides a temporary room for testing platformer movement, just temp testing in general put you temporary testing scenes here if u want
 
@@ -11,7 +15,15 @@ Provides a temporary room for testing platformer movement, just temp testing in 
 
 [Dependencies]
 InputManager and menu callback supplied by game
+Color class
+
 ]]
+
+-- TODO: DO NOT USE THE WINDOW COORDINATES AS PHYSICS COORDINATES... we will make a right handed coordinate system trust
+
+-- Preamble
+
+local Color = require("src.classes.Color")
 
 -- vars
 
@@ -19,33 +31,10 @@ local MOVE_SPEED = 240
 local GRAVITY =    1400
 local JUMP_SPEED = 550
 
-local backgroundColor = {
-    red = 31/255,
-    green = 33/255,
-    blue = 43/255,
-    alpha = 1,
-}
-
-local floorColor = {
-    red = 102/255,
-    green = 107/255,
-    blue = 122/255,
-    alpha = 1,
-}
-
-local playerColor = {
-    red = 242/255,
-    green = 217/255,
-    blue = 115/255,
-    alpha = 1,
-}
-
-local textColor = {
-    red = 243/255,
-    green = 232/255,
-    blue = 215/255,
-    alpha = 1,
-}
+local backgroundColor = Color.new255(031, 033, 043)
+local floorColor      = Color.new255(102, 107, 122)
+local playerColor     = Color.new255(242, 217, 115)
+local textColor       = Color.new255(243, 232, 215)
 
 -- class
 local GameScene = {}
@@ -119,15 +108,15 @@ function GameScene:draw()
     local floorY = height - 60
     local player = self.player
 
-    love.graphics.clear(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.alpha)
+    love.graphics.clear(backgroundColor:unpack())
 
-    love.graphics.setColor(floorColor.red, floorColor.green, floorColor.blue, floorColor.alpha)
+    love.graphics.setColor(floorColor:unpack())
     love.graphics.rectangle("fill", 0, floorY, width, 60)
 
-    love.graphics.setColor(playerColor.red, playerColor.green, playerColor.blue, playerColor.alpha)
+    love.graphics.setColor(playerColor:unpack())
     love.graphics.rectangle("fill", player.x, player.y, player.width, player.height)
 
-    love.graphics.setColor(textColor.red, textColor.green, textColor.blue, textColor.alpha)
+    love.graphics.setColor(textColor:unpack())
     love.graphics.print("Layout: " .. self.input.movementScheme .. " | Space: jump | R: reset | Escape: menu", 20, 20)
 end
 
