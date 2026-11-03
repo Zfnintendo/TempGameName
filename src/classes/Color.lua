@@ -1,9 +1,9 @@
 --[[
 
 Color.lua by Katrina
-0.0.0
+0.0.1
 C 2026-11-02
-U 2026-11-02
+U 2026-11-03
 
 This class provides a less insufferable, more ameliorable color format to use with the LOVE engine.
 
@@ -13,6 +13,8 @@ This class provides a less insufferable, more ameliorable color format to use wi
 [Used By]
 (none)
 
+
+[Class]
 
 - [.new]    Returns a new Color instance.
   - Values range from 0 to 1.
@@ -29,8 +31,14 @@ This class provides a less insufferable, more ameliorable color format to use wi
   - Intuitive for some other artists.
   - Defaults to (0, 0, 0, 255) where values are omitted.
 
+[Instance]
 
-- [:unpack] Returns a tuple, consisting of the Color instance's red, green, blue, and alpha components in that order.
+- [.red]   The red channel of the color. Colors range from 0 to 1.
+- [.green] The green channel of the color.
+- [.blue]  The blue channel of the color.
+- [.alpha] The alpha channel of the color.
+
+- [:unpack]  Returns a tuple, consisting of the Color instance's red, green, blue, and alpha components in that order.
 
 - [:unpack3] Returns a tuple, consisting of the Color instance's red, green, and blue components in that order.
 
