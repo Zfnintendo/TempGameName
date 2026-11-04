@@ -38,6 +38,9 @@ None
 - [:newFloor]   returns a new floored vector
 - [:newCeil]    returns a new ceiled vector
 - [:newAbs]     returns a new abs'ed vector
+
+- [:unpack2]    returns a tuple of the x and y axis
+- [:unpack3]    returns a tuple of the x, y and z axis
 ]]
 
 local Vector = {}
@@ -205,6 +208,14 @@ function Vector:newAbs()
         math.abs(self.y),
         math.abs(self.z)
     )
+end
+
+function Vector:unpack2()
+    return self.x, self.y
+end
+
+function Vector:unpack3()
+    return self.x, self.y, self.z
 end
 
 return Vector
