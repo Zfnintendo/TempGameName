@@ -48,37 +48,14 @@ src.classes.Position
 ]]
 
 local Position = require("src.classes.Position")
+local Validation = require("src.utils.NumberValidation")
 
 local Rectangle = {}
 Rectangle.__index = Rectangle
 
-local function _validateNumber(value)
-    assert(
-        type(value) == "number"
-            and value == value
-            and value > -math.huge
-            and value < math.huge,
-        "expected a finite number but got: " .. tostring(value)
-    )
-end
-
-local function _validateSize(width, height)
-    _validateNumber(width)
-    _validateNumber(height)
-
-    assert(width >= 0 and height >= 0, "Rectangle dimensions have to be non negative")
-end
-
-local function _validateCoordinates(x, y, z)
-    _validateNumber(x)
-    _validateNumber(y)
-    _validateNumber(z)
-end
-
-local function _validateArguments(x, y, z, width, height)
-    _validateCoordinates(x, y, z)
-    _validateSize(width, height)
-end
+local _validateArguments = Validation.validateArguments
+local _validateSize = Validation.validateSize2
+local _validateCoordinates = Validation.validateCoordinates
 
 function Rectangle.new(x, y, z, width, height)
     _validateArguments(x, y, z, width, height)

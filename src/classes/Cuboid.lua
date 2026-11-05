@@ -13,6 +13,7 @@ Boundary rules:
 
 [Dependencies]
 src.classes.Position
+src.utils.NumberValidation
 
 - [.new] Creates a cuboid from x, y, z, width, height, depth
 
@@ -37,36 +38,13 @@ src.classes.Position
 ]]
 
 local Position = require("src.classes.Position")
+local Validation = require("src.utils.NumberValidation")
 
 local Cuboid = {}
 Cuboid.__index = Cuboid
 
-local function _validateNumber(value)
-    assert(
-        type(value) == "number"
-            and value == value
-            and value > -math.huge
-            and value < math.huge,
-        "Expected a finite number, received: " .. tostring(value)
-    )
-end
-
-local function _validateCoordinates(x, y, z)
-    _validateNumber(x)
-    _validateNumber(y)
-    _validateNumber(z)
-end
-
-local function _validateSize(width, height, depth)
-    _validateNumber(width)
-    _validateNumber(height)
-    _validateNumber(depth)
-
-    assert(
-        width >= 0 and height >= 0 and depth >= 0,
-        "Cuboid dimensions must be non-negative"
-    )
-end
+local _validateSize = Validation.validateSize3
+local _validateCoordinates = Validation.validateCoordinates
 
 function Cuboid.new(x, y, z, width, height, depth)
     _validateCoordinates(x, y, z)
