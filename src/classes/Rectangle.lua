@@ -1,5 +1,7 @@
 --[[
 Rectangle.lua - Zeftarium
+C 2026-11-04
+U 2026-11-05
 
 Stores an axis aligned rectangle using its top-left position and size. Coordinates must be finite numbers, dimensions must also be non negative.
 Methods expect Rectangle instances containing a Position, width, and height. Z represents a discrete layer so contains and intersects require matching Z.

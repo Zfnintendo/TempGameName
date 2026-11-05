@@ -15,18 +15,23 @@ Boundary rules:
 src.classes.Position
 
 - [.new] Creates a cuboid from x, y, z, width, height, depth
+
 - [:setPosition] Changes the minimum corner
 - [:setSize] Changes dimensions
+
 - [:translate] Moves by dx, dy, dz
+
 - [:getMaxX] Returns the maximum X coordinate
 - [:getMaxY] Returns the maximum Y coordinate
 - [:getMaxZ] Returns the maximum Z coordinate
 - [:getCenter] Returns center x, y, z
 - [:getVolume] Returns volume
 - [:getSurfaceArea] Returns surface area
+
 - [:isEmpty] Checks whether the cuboid has no volume
 - [:contains] Checks whether a point is inside
 - [:intersects] Checks positive-volume overlap with another cuboid
+
 - [:clone] Creates an independent cuboid
 - [:unpack] Returns x, y, z, width, height, depth
 ]]
@@ -52,7 +57,7 @@ local function _validateCoordinates(x, y, z)
     _validateNumber(z)
 end
 
-local function validateSize(width, height, depth)
+local function _validateSize(width, height, depth)
     _validateNumber(width)
     _validateNumber(height)
     _validateNumber(depth)
@@ -65,7 +70,7 @@ end
 
 function Cuboid.new(x, y, z, width, height, depth)
     _validateCoordinates(x, y, z)
-    validateSize(width, height, depth)
+    _validateSize(width, height, depth)
 
     return setmetatable({
         position = Position.new(x, y, z),
@@ -75,6 +80,7 @@ function Cuboid.new(x, y, z, width, height, depth)
     }, Cuboid)
 end
 
+-- I only remembered i made set methods later on here lol sorry rectangle!
 function Cuboid:setPosition(x, y, z)
     _validateCoordinates(x, y, z)
 
@@ -86,7 +92,7 @@ function Cuboid:setPosition(x, y, z)
 end
 
 function Cuboid:setSize(width, height, depth)
-    validateSize(width, height, depth)
+    _validateSize(width, height, depth)
 
     self.width = width
     self.height = height
@@ -148,9 +154,7 @@ function Cuboid:contains(x, y, z)
 end
 
 function Cuboid:intersects(other)
-    if self:isEmpty() or other:isEmpty() then
-        return false
-    end
+    if self:isEmpty() or other:isEmpty() then return false end
 
     return self.position:getX() < other:getMaxX()
         and self:getMaxX() > other.position:getX()
@@ -163,10 +167,7 @@ end
 function Cuboid:clone()
     local x, y, z = self.position:unpack3()
 
-    return Cuboid.new(
-        x, y, z,
-        self.width, self.height, self.depth
-    )
+    return Cuboid.new(x, y, z, self.width, self.height, self.depth)
 end
 
 function Cuboid:unpack()
