@@ -33,7 +33,7 @@ end
 
 function NumberValidation.validateArguments(x, y, z, width, height)
     NumberValidation.validateCoordinates(x, y, z)
-    NumberValidation.validateSize(width, height)
+    NumberValidation.validateSize2(width, height)
 end
 
 return NumberValidation

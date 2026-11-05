@@ -8,15 +8,20 @@ Each entity receives independent component instances. Collision dimensions exten
 [Dependencies]
 src.classes.Position
 src.classes.Velocity
+src.classes.Rectangle
 src.utils.NumberValidation
 *A World instance supplied by the caller*
 
-- [.create] Creates an office player and returns its entity IDs, z defaults to zero when omitted
+- [.create] Creates an office player and returns its entity ID, z defaults to zero when omitted
 ]]
 
 local Position = require("src.classes.Position")
 local Velocity = require("src.classes.Velocity")
+local Rectangle = require("src.classes.Rectangle")
 local Validation = require("src.utils.NumberValidation")
+
+local WIDTH = 24
+local HEIGHT = 24
 
 local PlayerOffice = {}
 
@@ -29,6 +34,8 @@ function PlayerOffice.create(world, x, y, z)
 
     _validateCoordinates(x, y, z)
 
+    local hitbox = Rectangle.new(x, y, z, WIDTH, HEIGHT)
+
     return world:create({
         position = Position.new(x, y, z),
         velocity = Velocity.new(),
@@ -36,13 +43,13 @@ function PlayerOffice.create(world, x, y, z)
         playerControlled = {},
 
         officeMovement = {
-            speed = 160,
+            horizontalSpeed = Velocity.new(160, 0, 0),
+            verticalSpeed = Velocity.new(0, 160, 0),
             facing = "down",
         },
 
         collider = {
-            width = 24,
-            height = 24,
+            hitbox = hitbox
         },
     })
 end
