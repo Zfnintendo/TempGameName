@@ -1,5 +1,7 @@
 --[[
 UIElement.lua - Zeftarium
+C 2026-11-06
+U 2026-11-06
 
 Provides a base UI element with rectangular bounds and state flags. Intended to be extended by elements such as labels and buttons.
 Bounds use screen coordinates: positive X points right and positive Y points downward. Rectangle Z is fixed to zero when constructed.

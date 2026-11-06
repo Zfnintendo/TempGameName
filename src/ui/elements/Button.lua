@@ -1,5 +1,7 @@
 --[[
 Button.lua - Zeftarium
+C 2026-11-06
+U 2026-11-06
 
 Extends UIElement with text and an optional click callback. Uses screen coordinates: positive X points right, positive Y downward.
 Activation occurs immediately on a left mouse press inside the bounds, rather than on mouse release. Disabled buttons ignore presses.
