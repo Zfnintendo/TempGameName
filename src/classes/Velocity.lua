@@ -10,17 +10,17 @@ Mutators return self for chaining. Validation raises an error without modifying 
 src.classes.Vector
 src.utils.NumberValidation
 
-- [.new] Creates a velocity; omitted coordinates default to zero
-- [.newEmpty] Creates a zero velocity
+- [.new]            Creates a velocity; omitted coordinates default to zero
+- [.newEmpty]       Creates a zero velocity
 
-- [:set] Replaces all velocity coordinates
-- [:stop] Sets velocity to zero
+- [:set]            Replaces all velocity coordinates
+- [:stop]           Sets velocity to zero
 
-- [:speed] Returns scalar speed in world units per second
-- [:displacement] Returns a new Vector for constant-velocity travel over dt
-- [:accelerate] Applies acceleration in world units per second squared over dt
+- [:speed]          Returns scalar speed in world units per second
+- [:displacement]   Returns a new Vector for constant-velocity travel over dt
+- [:accelerate]     Applies acceleration in world units per second squared over dt
 
-- [:clone] Returns an independent Velocity instance
+- [:clone]          Returns an independent Velocity instance
 ]]
 
 local Vector = require("src.classes.Vector")

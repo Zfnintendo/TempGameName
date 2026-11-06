@@ -15,26 +15,26 @@ Boundary rules:
 src.classes.Position
 src.utils.NumberValidation
 
-- [.new] Creates a cuboid from x, y, z, width, height, depth
+- [.new]                Creates a cuboid from x, y, z, width, height, depth
 
-- [:setPosition] Changes the minimum corner
-- [:setSize] Changes dimensions
+- [:setPosition]        Changes the minimum corner
+- [:setSize]            Changes dimensions
 
-- [:translate] Moves by dx, dy, dz
+- [:translate]          Moves by dx, dy, dz
 
-- [:getMaxX] Returns the maximum X coordinate
-- [:getMaxY] Returns the maximum Y coordinate
-- [:getMaxZ] Returns the maximum Z coordinate
-- [:getCenter] Returns center x, y, z
-- [:getVolume] Returns volume
-- [:getSurfaceArea] Returns surface area
+- [:getMaxX]            Returns the maximum X coordinate
+- [:getMaxY]            Returns the maximum Y coordinate
+- [:getMaxZ]            Returns the maximum Z coordinate
+- [:getCenter]          Returns center x, y, z
+- [:getVolume]          Returns volume
+- [:getSurfaceArea]     Returns surface area
 
-- [:isEmpty] Checks whether the cuboid has no volume
-- [:contains] Checks whether a point is inside
-- [:intersects] Checks positive-volume overlap with another cuboid
+- [:isEmpty]            Checks whether the cuboid has no volume
+- [:contains]           Checks whether a point is inside
+- [:intersects]         Checks positive-volume overlap with another cuboid
 
-- [:clone] Creates an independent cuboid
-- [:unpack] Returns x, y, z, width, height, depth
+- [:clone]              Creates an independent cuboid
+- [:unpack]             Returns x, y, z, width, height, depth
 ]]
 
 local Position = require("src.classes.Position")
