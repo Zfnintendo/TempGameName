@@ -61,4 +61,6 @@ function Game:resize(width, height)
     self.scenes:dispatch("resize", width, height)
 end
 
+function Game:quit() end
+
 return Game
