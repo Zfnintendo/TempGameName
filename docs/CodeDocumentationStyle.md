@@ -24,6 +24,8 @@ An example of how you could document your code would be like the following code 
 ```lua
 --[[
 Code made by x and/or y
+C XXXX-XX-XX
+U XXXX-XX-XX
 
 This script does this and that and takes this and that as the arguments and does this specifically, does not do that, can interact with what, offers this etc
 
