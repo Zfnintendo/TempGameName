@@ -22,3 +22,7 @@ end
 function love.resize(width, height)
     Game:resize(width, height)
 end
+
+function love.quit()
+    Game:quit()
+end

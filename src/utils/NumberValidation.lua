@@ -22,7 +22,7 @@ function NumberValidation.validateSize3(width, height, depth)
     NumberValidation.validateNumber(height)
     NumberValidation.validateNumber(depth)
 
-    assert(width >= 0 and height >= 0 and depth >= 0, "Rectangle dimensions have to be non negative")
+    assert(width >= 0 and height >= 0 and depth >= 0, "Cuboid dimensions have to be non negative")
 end
 
 function NumberValidation.validateCoordinates(x, y, z)

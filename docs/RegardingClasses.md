@@ -7,3 +7,4 @@ It's used for smoothing janky implementations over. That's it." - lexlt*
 ## useless comment
 "lowk man i kinda like oop idk man" - zeftarium 
 
+lexlt update 2026-11-08: oop is fine for ui but see if you can use ecs for gameplay at the level of tiles and entities and stuff
