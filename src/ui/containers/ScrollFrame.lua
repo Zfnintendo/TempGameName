@@ -1,5 +1,7 @@
 --[[
 ScrollFrame.lua - Zeftarium
+C 2026-11-11
+U 2026-11-11
 
 Extends Frame with scrolling along one selected axis. Background, border, and optional scrollbar remain fixed.
 Child positions use content coordinates. Content size is supplied explicitly. Children are clipped to a rectangular viewport.
@@ -223,7 +225,7 @@ function ScrollFrame:mousepressed(x, y, button)
 
     local length, thumbLength, travel = _scrollbarMetrics(self)
 
-    if length then
+    if length ~= nil and thumbLength ~= nil and travel ~= nil then
         local vertical = self.orientation == "vertical"
         local crossSize = vertical
             and self.bounds.width or self.bounds.height
