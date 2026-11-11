@@ -1,9 +1,11 @@
 --[[
 PlayerOffice.lua - Zeftarium
 
-Creates an office player entity with Position and Velocity components.
-Office movement has no gravity or jumping. Positive Y points upward in world space.
-Each entity receives independent component instances. Collision dimensions extend from the position in positive X and Y.
+
+Creates an office player for continuous four-direction movement. No gravity or jumping is applied.
+Position uses world coordinates with positive Y upward. Position represents the minimum X/Y corner of the collision rectangle.
+The position component and hitbox share the same Position instance. Systems must update that Position in place to preserve this relationship.
+Configured movement velocities are separate from current velocity. Each player receives independent component instances.
 
 [Dependencies]
 src.classes.Position
@@ -28,19 +30,19 @@ local PlayerOffice = {}
 local _validateCoordinates = Validation.validateCoordinates
 
 function PlayerOffice.create(world, x, y, z)
-    if z == nil then
-        z = 0
-    end
+    if z == nil then z = 0 end
 
     _validateCoordinates(x, y, z)
 
     local hitbox = Rectangle.new(x, y, z, WIDTH, HEIGHT)
 
     return world:create({
-        position = Position.new(x, y, z),
+        position = hitbox.position,
         velocity = Velocity.new(),
 
-        playerControlled = {},
+        playerControlled = {
+            enabled = true,
+        },
 
         officeMovement = {
             horizontalSpeed = Velocity.new(160, 0, 0),
@@ -49,9 +51,20 @@ function PlayerOffice.create(world, x, y, z)
         },
 
         collider = {
-            hitbox = hitbox
+            hitbox = hitbox,
+            solid = true,
+        },
+
+        appearance = {
+            visible = true,
+        },
+
+        interaction = {
+            range = 40,
+            requested = false,
         },
     })
 end
 
 return PlayerOffice
+
