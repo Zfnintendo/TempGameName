@@ -1,7 +1,7 @@
 --[[
 ScrollFrame.lua - Zeftarium
-C 2026-11-11
-U 2026-11-11
+C 2026-11-10
+U 2026-11-10
 
 Extends Frame with scrolling along one selected axis. Background, border, and optional scrollbar remain fixed.
 Child positions use content coordinates. Content size is supplied explicitly. Children are clipped to a rectangular viewport.

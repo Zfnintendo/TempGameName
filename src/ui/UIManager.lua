@@ -1,7 +1,7 @@
 --[[
 UIManager.lua - Zeftarium
-C 2026-11-11
-U 2026-11-11
+C 2026-11-10
+U 2026-11-10
 
 UIManager manages the UI elements belonging to a scene. Create one with UIManager.new(), then use add(element) to register root elements such asframes or standalone buttons. 
 Children only need to be added to their parent container. remove(element) unregisters a root, and clear() removes all roots.
