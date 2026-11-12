@@ -31,7 +31,7 @@ function SceneManager.new()
     local self = setmetatable({
         current = nil,
         context = nil,
-        transtitioning = false,
+        transitioning = false,
     }, SceneManager)
 
     return self
