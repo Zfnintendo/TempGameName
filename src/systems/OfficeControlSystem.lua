@@ -1,5 +1,7 @@
 --[[
 OfficeControlSystem.lua - Zeftarium
+C 2026-11-12
+U 2026-11-12
 
 Converts movement input into velocity for controlled office entities. Does not change position or resolve collisions.
 Processes entities containing: playerControlled, officeMovement, and velocity.
@@ -41,11 +43,7 @@ function OfficeControlSystem.update(world, input)
 
     local direction = Vector.new(horizontal, vertical, 0):normalize()
 
-    for _, components in world:query(
-        "playerControlled",
-        "officeMovement",
-        "velocity"
-    ) do
+    for _, components in world:query("playerControlled", "officeMovement", "velocity") do
         local control = components.playerControlled
         local movement = components.officeMovement
         local velocity = components.velocity
