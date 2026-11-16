@@ -26,10 +26,13 @@ src.scenes.TestScene
 local InputManager = require("src.core.InputManager")
 local SceneManager = require("src.core.SceneManager")
 local TestScene = require("src.scenes.TestScene") -- ignore this for now its incomplete
+local TerminalChunkTestScene = require("src.scenes.TerminalChunkTestScene")
 
 local Game = {}
 
 function Game:load()
+    love.physics.setMeter(32)
+
     self.input = InputManager.new()
     self.scenes = SceneManager.new()
 
@@ -37,9 +40,12 @@ function Game:load()
 end
 
 function Game:startGame()
-    self.scenes:change(TestScene.new(self.input, function()
-        love.event.quit()
-    end))
+    self.scenes:change(TerminalChunkTestScene.new(
+        self.input,
+        function()
+            love.event.quit()
+        end
+    ))
 end
 
 function Game:update(dt)
