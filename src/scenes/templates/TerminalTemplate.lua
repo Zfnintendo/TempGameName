@@ -230,6 +230,7 @@ function TerminalTemplate.define(definition)
 
         player.position:setZ(self.spawnZ)
         player.platformMovement.jumpRequested = false
+        player.platformMovement.coyoteRemaining = 0
         player.platformMovement.facing = "right"
 
         self.input.lastShiftPress = nil
@@ -239,6 +240,7 @@ function TerminalTemplate.define(definition)
         Physics.sync(self.context.world)
 
         player.platformBody.grounded = false
+        player.platformMovement.coyoteRemaining = 0
 
         updateCamera(self)
     end
@@ -252,6 +254,7 @@ function TerminalTemplate.define(definition)
 
         player.playerControlled.enabled = false
         player.platformMovement.jumpRequested = false
+        player.platformMovement.coyoteRemaining = 0
 
         player.physics.body:setLinearVelocity(0, 0)
         player.physics.body:setActive(false)

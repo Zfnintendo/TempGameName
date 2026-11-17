@@ -50,6 +50,9 @@ function PlayerTerminal.create(world, x, y, z)
             jumpVelocity = Velocity.new(0, 550, 0),
             facing = "right",
             jumpRequested = false,
+
+            coyoteDuration = 0.1,
+            coyoteRemaining = 0,
         },
 
         gravity = {
