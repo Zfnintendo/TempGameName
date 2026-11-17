@@ -4,16 +4,15 @@ C 2026-11-16
 U 2026-11-16
 
 Validates terminal chunk declarations without modifying them.
-Requires exactly 64 rows containing exactly 64 cells each.
+Requires exactly 8 rows containing exactly 8 cells each.
 
 Allowed cells:
 0 or {0}       = empty
 1 or {1}       = standard wall block
 {2, "plotId"}  = plot linked to props.plotId
 
-Plot IDs must be unique within the chunk. Every plot requires matching properties.
-Every properties entry requires a matching plot. Supported kinds are supplied as a lookup table.
-Kind-specific settings are validated separately by their factories.
+Plot IDs may repeat within a chunk. Repeated IDs share configuration but create independent entities.
+Every plot requires matching properties. Every properties entry requires at least one matching plot.
 
 [Dependencies]
 None
@@ -24,7 +23,7 @@ None
 
 local TerminalChunkValidator = {}
 
-local GRID_SIZE = 64
+local GRID_SIZE = 8
 
 local function isNonEmptyString(value)
     return type(value) == "string" and value:find("%S") ~= nil
@@ -100,9 +99,7 @@ function TerminalChunkValidator.validate(chunk, supportedKinds)
             if kind == 2 then
                 assert(type(plotId) == "string", "Expected a plot ID")
 
-                if plots[plotId] then fail(cellLocation, "duplicate plot ID '" .. plotId .. "'; first declared at " .. plots[plotId]) end
-
-                plots[plotId] = cellLocation
+                plots[plotId] = true
 
                 if rawget(chunk.props, plotId) == nil then fail(cellLocation, "missing props for plot '" .. plotId .. "'") end
             end

@@ -27,8 +27,8 @@ local PlayerTerminal = {}
 
 local _validateCoordinates = Validation.validateCoordinates
 
-local WIDTH = 24
-local HEIGHT = 40
+local WIDTH = 16
+local HEIGHT = 16
 
 function PlayerTerminal.create(world, x, y, z)
     if z == nil then z = 0 end

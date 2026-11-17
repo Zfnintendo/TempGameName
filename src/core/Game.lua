@@ -25,8 +25,11 @@ src.scenes.TestScene
 
 local InputManager = require("src.core.InputManager")
 local SceneManager = require("src.core.SceneManager")
+
 local TestScene = require("src.scenes.TestScene") -- ignore this for now its incomplete
 local TerminalChunkTestScene = require("src.scenes.TerminalChunkTestScene")
+
+local RunState = require("src.core.RunState")
 
 local Game = {}
 
@@ -36,15 +39,22 @@ function Game:load()
     self.input = InputManager.new()
     self.scenes = SceneManager.new()
 
+    self.runState = RunState.new(3)
+
     self:startGame()
 end
 
 function Game:startGame()
     self.scenes:change(TerminalChunkTestScene.new(
         self.input,
+
         function()
             love.event.quit()
-        end
+        end,
+
+        {
+            runState = self.runState,
+        }
     ))
 end
 
@@ -62,9 +72,7 @@ function Game:keyPressed(key, scancode, isRepeat)
 end
 
 function Game:mousepressed(x, y, button, istouch, presses)
-    self.scenes:dispatch(
-        "mousepressed", x, y, button, istouch, presses
-    )
+    self.scenes:dispatch("mousepressed", x, y, button, istouch, presses)
 end
 
 function Game:wheelmoved(dx, dy)

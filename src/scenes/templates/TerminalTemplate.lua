@@ -44,6 +44,7 @@ Generated methods:
 Definitions and property settings must be treated as read-only.
 ]]
 
+local RunState = require("src.core.RunState")
 local Camera = require("src.core.Camera")
 local Color = require("src.classes.Color")
 local Validation = require("src.utils.NumberValidation")
@@ -53,6 +54,8 @@ local Factories = require("src.generation.TerminalPropertiesFactories")
 
 local Controls = require("src.systems.TerminalControlSystem")
 local Physics = require("src.systems.TerminalPhysicsSystem")
+local Actions = require("src.systems.TerminalActionSystem")
+local Health = require("src.systems.HealthSystem")
 local Animation = require("src.systems.AnimationSystem")
 local CameraSystem = require("src.systems.CameraSystem")
 local Renderer = require("src.systems.RenderSystem")
@@ -105,13 +108,19 @@ function TerminalTemplate.define(definition)
     local Scene = {}
     Scene.__index = Scene
 
-    function Scene.new(input, onMenu)
+    function Scene.new(input, onMenu, options)
+        options = options or {}
+
         assert(type(input) == "table", "Expected InputManager")
-        assert(onMenu == nil or type(onMenu) == "function", "onMenu must be a function or nil")
+        assert(onMenu == nil or type(onMenu) == "function")
+        assert(options.onDeath == nil or type(options.onDeath) == "function")
 
         return setmetatable({
             input = input,
             onMenu = onMenu,
+            onDeath = options.onDeath,
+
+            runState = options.runState or RunState.new(),
         }, Scene)
     end
 
@@ -157,11 +166,19 @@ function TerminalTemplate.define(definition)
             end
 
             local selectedChunk = self.map.chunks[playerChunk]
-            local playerId = selectedChunk.plots[definition.player.plot]
+            local players = selectedChunk.plots[definition.player.plot]
 
-            assert(playerId, "Player plot was not built")
+            assert(players and #players == 1, "Player plot must create exactly one entity")
+
+            local playerId = players[1]
 
             local player = self.context.world:get(playerId)
+            player.health = self.runState.terminalHealth
+
+            assert(player.health.current > 0, "Start a new run or revive before entering another level")
+
+            self.dead = false
+            self.actionState = Actions.newState()
 
             assert(
                 player.physics
@@ -217,6 +234,8 @@ function TerminalTemplate.define(definition)
 
         self.input.lastShiftPress = nil
 
+        self.actionState = Actions.newState()
+
         Physics.sync(self.context.world)
 
         player.platformBody.grounded = false
@@ -224,26 +243,82 @@ function TerminalTemplate.define(definition)
         updateCamera(self)
     end
 
+    function Scene:defeatPlayer()
+        if self.dead then return end
+
+        self.dead = true
+
+        local player = self.context.world:get(self.context.entities.player)
+
+        player.playerControlled.enabled = false
+        player.platformMovement.jumpRequested = false
+
+        player.physics.body:setLinearVelocity(0, 0)
+        player.physics.body:setActive(false)
+        player.velocity:stop()
+
+        if self.onDeath then self.onDeath(self.runState) end
+    end
+
+    function Scene:restartAttempt()
+        local player = self.context.world:get(self.context.entities.player)
+
+        player.health.current = player.health.maximum
+        player.health.invulnerabilityRemaining = 0
+
+        self.dead = false
+        self.accumulator = 0
+
+        player.physics.body:setActive(true)
+        player.playerControlled.enabled = true
+
+        self:resetPlayer()
+    end
+
     function Scene:update(dt)
         Validation.validateNumber(dt)
-        assert(dt >= 0, "Elapsed time must be non negative")
+        assert(dt >= 0, "Elapsed time must be non-negative")
+
+        if self.dead then
+            self.context.ui:update(dt)
+            return
+        end
 
         local elapsed = math.min(dt, MAX_FRAME_DT)
         self.accumulator = self.accumulator + elapsed
 
+        local world = self.context.world
+        local playerId = self.context.entities.player
+
         while self.accumulator >= FIXED_DT do
-            Controls.update(self.context.world, self.input, FIXED_DT)
+            Health.update(world, FIXED_DT)
+
+            Controls.update(world, self.input, FIXED_DT)
             self.context.physicsWorld:update(FIXED_DT)
-            Physics.sync(self.context.world)
+            Physics.sync(world)
+
+            local result = Actions.update(world, playerId, self.actionState)
+
+            local player = world:get(playerId)
+
+            if result ~= "dead" and player.position.y < -tileSize * 4 then
+                Health.damage(player.health, 1, true)
+                result = player.health.current <= 0 and "dead" or "damaged"
+            end
 
             self.accumulator = self.accumulator - FIXED_DT
+
+            if result == "dead" then
+                self:defeatPlayer()
+                return
+            elseif result == "damaged" then
+                self:resetPlayer()
+            else
+                Physics.sync(world)
+            end
         end
 
-        local player = self.context.world:get(self.context.entities.player)
-
-        if player.position.y < -tileSize * 4 then self:resetPlayer() end
-
-        Animation.update(self.context.world, elapsed)
+        Animation.update(world, elapsed)
         updateCamera(self)
         self.context.ui:update(dt)
     end
@@ -254,6 +329,17 @@ function TerminalTemplate.define(definition)
         self.camera:attach()
         Renderer.draw(self.context.world)
         self.camera:detach()
+
+        local player = self.context.world:get(self.context.entities.player)
+
+        love.graphics.push("all")
+        love.graphics.setColor(1, 1, 1, 1)
+
+        love.graphics.print(string.format("Health: %d / %d", player.health.current, player.health.maximum), 20, 20)
+
+        if self.dead then love.graphics.print("Defeated - R: retry | Escape: leave", 20, 44) end
+
+        love.graphics.pop()
 
         self.context.ui:draw()
     end
@@ -268,7 +354,17 @@ function TerminalTemplate.define(definition)
             return
         end
 
-        if action == "reset" then self:resetPlayer() return end
+        if action == "reset" then
+            if self.dead then
+                self:restartAttempt()
+            else
+                self:resetPlayer()
+            end
+
+            return
+        end
+
+        if self.dead then return end
 
         Controls.keyPressed(self.context.world, key, action)
     end

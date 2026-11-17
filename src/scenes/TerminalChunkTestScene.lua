@@ -1,30 +1,54 @@
-local TerminalTemplate =
-    require("src.scenes.templates.TerminalTemplate")
+local TerminalTemplate = require("src.scenes.templates.TerminalTemplate")
+local Generator = require("src.generation.TerminalLevelGenerator")
+local Factories = require("src.generation.TerminalPropertiesFactories")
 
 local Entry = require("data.terminal.chunks.Entry")
+local Flat = require("data.terminal.chunks.EmptySpace")
+local Platforms = require("data.terminal.chunks.LowPlatforms")
+local SpikesAndSprings = require("data.terminal.chunks.SpikesAndSpringsNewbieOne")
 
-return TerminalTemplate.define({
-    tileSize = 32,
+local TerminalChunkTestScene = {}
 
-    chunks = {
-        {
-            definition = Entry,
-            x = 0,
-            y = 0,
+function TerminalChunkTestScene.new(input, onMenu, options)
+    local layout = Generator.generate({
+        entry = Entry,
+
+        pool = {
+            Flat,
+            Platforms,
+            SpikesAndSprings,
         },
-    },
 
-    player = {
-        chunk = 1,
-        plot = "playerStart",
-    },
+        chunkCount = 5,
 
-    physics = {
-        gravityX = 0,
-        gravityY = -1400,
-    },
+        -- Uncomment to remake a certain a layout
+        -- seed = 12345,
+    }, 32, Factories)
 
-    camera = {
-        zoom = 2,
-    },
-})
+    local sceneModule = TerminalTemplate.define({
+        tileSize = 32,
+        chunks = layout.placements,
+
+        player = {
+            chunk = 1,
+            plot = "playerStart",
+        },
+
+        physics = {
+            gravityX = 0,
+            gravityY = -1400,
+        },
+
+        camera = {
+            zoom = 2,
+        },
+    })
+
+    local scene = sceneModule.new(input, onMenu, options)
+
+    scene.generatedLayout = layout
+
+    return scene
+end
+
+return TerminalChunkTestScene

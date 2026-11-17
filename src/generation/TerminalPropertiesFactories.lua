@@ -15,6 +15,9 @@ love2d physics API
 ]]
 
 local PlayerTerminal = require("src.entities.PlayerTerminal")
+local Rectangle = require("src.classes.Rectangle")
+local Color = require("src.classes.Color")
+local Validation = require("src.utils.NumberValidation")
 
 local TerminalPropertyFactories = {}
 
@@ -42,6 +45,46 @@ function TerminalPropertyFactories.playerSpawn(context, x, y, z, properties, til
     entity.gravity.acceleration = nil
 
     return entityId
+end
+
+function TerminalPropertyFactories.actionObject(context, x, y, z, properties, tileSize)
+    local objectType = properties.type
+
+    assert(objectType == "spring" or objectType == "spike", "Unknown action object type")
+
+    if objectType == "spring" then
+        Validation.validateNumber(properties.power)
+        assert(properties.power > 0, "Spring power must be positive")
+    else
+        Validation.validateNumber(properties.damage)
+
+        assert(properties.damage > 0 and properties.damage % 1 == 0, "Spike damage must be a positive integer")
+    end
+
+    local hitbox = Rectangle.new(x, y, z, tileSize, tileSize)
+
+    return context.world:create({
+        position = hitbox.position,
+
+        collider = {
+            hitbox = hitbox,
+            solid = false,
+        },
+
+        appearance = {
+            visible = true,
+            color = objectType == "spring"
+                and Color.new255(80, 220, 140)
+                or Color.new255(230, 70, 70),
+            layer = 15,
+        },
+
+        actionObject = {
+            type = objectType,
+            power = properties.power,
+            damage = properties.damage,
+        },
+    })
 end
 
 return TerminalPropertyFactories

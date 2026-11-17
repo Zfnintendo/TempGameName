@@ -12,7 +12,7 @@ Rows run top to bottom; world Y points upward.
 
 Property factories receive: context, x, y, z, properties, tileSize.
 Each factory returns one ECS entity ID. Properties are shared configuration and must not be mutated.
-Factories must create independent runtime state. Returns wall IDs and plot IDs mapped to entity IDs.
+Factories must create independent runtime state. Returns wall IDs and arrays of entity IDs grouped by plot ID.
 Plot IDs are local to this chunk placement. Building is not transactional. If construction fails, the caller must
 discard the partially built scene context and its physics world.
 
@@ -33,7 +33,7 @@ local Color = require("src.classes.Color")
 
 local TerminalChunkBuilder = {}
 
-local GRID_SIZE = 64
+local GRID_SIZE = 8
 
 local function createWall(context, x, y, z, size, color)
     local hitbox = Rectangle.new(x, y, z, size, size)
@@ -135,7 +135,8 @@ function TerminalChunkBuilder.build(context, chunk, factories, options)
 
                 assert(id ~= nil and context.world:get(id) ~= nil, "Factory must return an existing entity ID: " .. plotId)
 
-                result.plots[plotId] = id
+                result.plots[plotId] = result.plots[plotId] or {}
+                table.insert(result.plots[plotId], id)
             end
         end
     end
