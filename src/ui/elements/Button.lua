@@ -52,18 +52,29 @@ function Button:draw()
     local width = self.bounds.width
     local height = self.bounds.height
 
+    love.graphics.push("all")
+
+    love.graphics.setColor(0.25, 0.28, 0.34, 1)
     love.graphics.rectangle("fill", x, y, width, height)
-    love.graphics.print(self.text, x + 10, y + 10)
+
+    love.graphics.setColor(1, 1, 1, 1)
+    love.graphics.printf(self.text, x, y + (height - love.graphics.getFont():getHeight()) / 2, width, "center")
+
+    love.graphics.pop()
 end
 
 function Button:mousepressed(x, y, button)
-    if not self.enabled then return end
+    if not self.visible or not self.enabled then return false end
 
     if button == 1 and self:contains(x, y) then
         if self.onClick then
             self.onClick()
         end
+
+        return true
     end
+
+    return false
 end
 
 setmetatable(Button, { __index = UIElement })
