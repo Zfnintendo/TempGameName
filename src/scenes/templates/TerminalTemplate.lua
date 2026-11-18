@@ -304,7 +304,7 @@ function TerminalTemplate.define(definition)
 
             local player = world:get(playerId)
 
-            if result ~= "dead" and player.position.y < -tileSize * 4 then
+            if result ~= "dead" and player.position.y < -128 then
                 Health.damage(player.health, 1, true)
                 result = player.health.current <= 0 and "dead" or "damaged"
             end

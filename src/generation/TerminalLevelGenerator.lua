@@ -23,7 +23,7 @@ local Validation = require("src.utils.NumberValidation")
 
 local Generator = {}
 
-local SIZE = 8
+local SIZE = 16
 
 local function validateChunk(chunk, factories, isEntry)
     Validator.validate(chunk, factories)

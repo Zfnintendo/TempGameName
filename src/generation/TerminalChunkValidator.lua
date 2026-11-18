@@ -23,7 +23,7 @@ None
 
 local TerminalChunkValidator = {}
 
-local GRID_SIZE = 8
+local GRID_SIZE = 16
 
 local function isNonEmptyString(value)
     return type(value) == "string" and value:find("%S") ~= nil

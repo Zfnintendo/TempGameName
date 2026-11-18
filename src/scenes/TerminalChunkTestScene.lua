@@ -23,10 +23,10 @@ function TerminalChunkTestScene.new(input, onMenu, options)
 
         -- Uncomment to remake a certain a layout
         -- seed = 12345,
-    }, 32, Factories)
+    }, 16, Factories)
 
     local sceneModule = TerminalTemplate.define({
-        tileSize = 32,
+        tileSize = 16,
         chunks = layout.placements,
 
         player = {

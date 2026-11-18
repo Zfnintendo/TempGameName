@@ -33,7 +33,7 @@ local Color = require("src.classes.Color")
 
 local TerminalChunkBuilder = {}
 
-local GRID_SIZE = 8
+local GRID_SIZE = 16
 
 local function createWall(context, x, y, z, size, color)
     local hitbox = Rectangle.new(x, y, z, size, size)
