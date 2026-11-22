@@ -5,6 +5,7 @@ local chunks = {
     require("data.terminal.chunks.EmptySpace"),
     require("data.terminal.chunks.LowPlatforms"),
     require("data.terminal.chunks.SpikesAndSpringsNewbieOne"),
+    require("data.terminal.chunks.SpikesAndSpringsAgain"),
     (require("data.terminal.chunks.Entry")),
 }
 
